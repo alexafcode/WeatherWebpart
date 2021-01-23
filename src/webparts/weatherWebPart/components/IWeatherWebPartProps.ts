@@ -1,6 +1,7 @@
 export interface IWeatherWebPartProps {
   description: string;
-  checkbox: string;
+  isImperialUnits: string;
+  isSearchDisable: string;
 }
 
 export interface IWeatherState {

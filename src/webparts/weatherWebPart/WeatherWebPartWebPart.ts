@@ -14,7 +14,8 @@ import { IWeatherWebPartProps } from "./components/IWeatherWebPartProps";
 
 export interface IWeatherWebPartWebPartProps {
   description: string;
-  checkbox: string;
+  isImperialUnits: string;
+  isSearchDisable: string;
 }
 
 export default class WeatherWebPartWebPart extends BaseClientSideWebPart<IWeatherWebPartWebPartProps> {
@@ -23,7 +24,8 @@ export default class WeatherWebPartWebPart extends BaseClientSideWebPart<IWeathe
       WeatherWebPart,
       {
         description: this.properties.description,
-        checkbox: this.properties.checkbox,
+        isImperialUnits: this.properties.isImperialUnits,
+        isSearchDisable: this.properties.isSearchDisable,
       }
     );
 
@@ -38,7 +40,8 @@ export default class WeatherWebPartWebPart extends BaseClientSideWebPart<IWeathe
     return Version.parse("1.0");
   }
 
-  private labelboxProperty: string = "Metric Units";
+  private labelboxProperty: string = "Use Imperial Units";
+  private labelboxSearchProperty: string = "Disable Search";
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
@@ -54,8 +57,12 @@ export default class WeatherWebPartWebPart extends BaseClientSideWebPart<IWeathe
                 PropertyPaneTextField("description", {
                   label: strings.DescriptionFieldLabel,
                 }),
-                PropertyPaneCheckbox("checkbox", {
-                  text: "Use Imperial Units Yes/No",
+                PropertyPaneCheckbox("isImperialUnits", {
+                  text: this.labelboxProperty,
+                  checked: false,
+                }),
+                PropertyPaneCheckbox("isSearchDisable", {
+                  text: this.labelboxSearchProperty,
                   checked: false,
                 }),
               ],

@@ -10,9 +10,9 @@ const sleep = (milleseconds: number) =>
   new Promise((resolve) => setTimeout(resolve, milleseconds));
 
 export const getCurrentWeather = async (
-  checkbox: string
+  isImperialUnits: string
 ): Promise<IWeatherState> => {
-  const isImperial = Boolean(checkbox);
+  const isImperial = Boolean(isImperialUnits);
   units = isImperial ? "Imperial" : "Metric";
   ///
   await sleep(1000);
