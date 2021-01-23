@@ -12,8 +12,8 @@ const sleep = (milleseconds: number) =>
 export const getCurrentWeather = async (
   checkbox: string
 ): Promise<IWeatherState> => {
-  const un = Boolean(checkbox);
-  units = un ? "Imperial" : "Metric";
+  const isImperial = Boolean(checkbox);
+  units = isImperial ? "Imperial" : "Metric";
   ///
   await sleep(1000);
   return t;
@@ -51,20 +51,18 @@ export async function getWeather(position: GeolocationPosition) {
       : json.LocalizedName,
     countryName: json.Country ? json.Country.LocalizedName : json.country,
   };
-  const cityData = await getWeatherForCity(json);
-  console.log(cityData);
-  return transformCity(cityData, names);
+  const data: object = await getWeatherForCity(json);
+  return transformCity(data, names);
 }
 
 export async function getWeatherForCity(data) {
-  const queryKey = data.Key ? data.Key : data.selectCity.Key;
+  const queryKey: string = data.Key ? data.Key : data.selectCity.Key;
   const url = `/currentconditions/v1/${queryKey}?apikey=${_key}&language=en-en&details=true`;
-  const json = await getResource(url);
-  const item = {
+  const json: object = await getResource(url);
+  return {
     res: json[0],
     queryKey,
   };
-  return item;
 }
 
 export function transformCity(data, city): IWeatherState {
@@ -74,8 +72,6 @@ export function transformCity(data, city): IWeatherState {
     month: "long",
     year: "numeric",
   });
-  //return {
-  // const units = "Metric"; //"Imperial";
 
   const weatherState: IWeatherState = {
     key: queryKey,
@@ -100,7 +96,7 @@ export function transformCity(data, city): IWeatherState {
   return weatherState;
 }
 
-// https://dataservice.accuweather.com/currentconditions/v1/294922?apikey=eMnxDj2GF4ffTteDsanTrmQEaP2mgUIA&language=en-en&details=true
+// https://dataservice.accuweather.com/currentconditions/v1/294922?apikey=&language=en-en&details=true
 const t: IWeatherState = {
   IsDayTime: true,
   city: "Perm",
