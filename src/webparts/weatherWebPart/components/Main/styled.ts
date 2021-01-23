@@ -6,20 +6,21 @@ export const Container = styled.div`
 `;
 export const LeftContainer = styled.div`
   flex: 1;
+  margin-top: -5%;
 `;
 
 export const TempContainer = styled.div`
   text-align: center;
   font-weight: 400;
-  line-height: 1.75rem;
+  line-height: 1rem;
   margin-bottom: 10%;
   header {
-    font-size: 4vh;
+    font-size: calc(0.75em + 1vmin);
     margin-bottom: 5%;
     color: lightgray;
   }
   span {
-    font-size: 5vh;
+    font-size: calc(1.25em + 1vmin);
     color: whitesmoke;
   }
 `;
@@ -27,14 +28,14 @@ export const TempContainer = styled.div`
 export const RealFeelContainer = styled.div`
   text-align: center;
   font-weight: 400;
-  line-height: 4vh;
+  line-height: 1rem;
   margin-bottom: 10%;
   header {
-    font-size: 3.5vh;
+    font-size: calc(0.5em + 1vmin);
     color: lightgray;
   }
   span {
-    font-size: 4vh;
+    font-size: calc(1em + 1vmin);
     color: whitesmoke;
   }
 `;
@@ -51,19 +52,23 @@ const getIconUrl = (iconNumber: number) =>
 
 export const LogoWeather = styled.img.attrs<IIConProps>(({ iconNumber }) => ({
   src: `${String(getIconUrl(iconNumber))}`,
-  height: 150,
-  width: 150,
-}))<IIConProps>``;
+  height: 75,
+  width: 75,
+}))<IIConProps>`
+  margin: auto;
+`;
 
 export const RightContainer = styled.div`
   flex: 1;
   text-align: center;
+  margin-top: -5%;
   div {
-    font-size: 2vh;
+    font-size: calc(0.5em + 1vmin);
     color: whitesmoke;
     margin-bottom: 5%;
   }
   span {
     margin-left: 5%;
+    margin-bottom: 5%;
   }
 `;

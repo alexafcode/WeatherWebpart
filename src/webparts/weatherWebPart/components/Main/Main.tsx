@@ -39,10 +39,9 @@ const Main: React.FC = () => {
           <span>Wind:</span>
           <span>{windDirect}</span>
         </div>
-        {/* <div>Wind Gusts:{windSpeed}</div> */}
         <div>
-          <span>Wind Gusts:</span>
-          <span>{windSpeed}</span>
+          <div>Wind Gusts:</div>
+          <div>{windSpeed}</div>
         </div>
         <div>
           <img src={String(iconPressure)} alt="pressure" />

@@ -8,7 +8,8 @@ export const InfoContainer = styled.div`
   div {
     color: lightgray;
     text-align: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: calc(0.5em + 1vmin);
   }
 `;
 export const ButtonContainer = styled.div`

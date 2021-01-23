@@ -4,7 +4,7 @@ import WeatherSearchBox from "./Search/WeatherSearchBox";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import ThemeContext from "./ThemeContext";
 import { getCurrentWeather } from "./service/WeatherService";
-import { Container, Text } from "./Weather.styled";
+import { Container } from "./Weather.styled";
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import Main from "./Main/Main";
@@ -18,7 +18,6 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = (props) => {
     const fetchWeather = async () => {
       setLoading(true);
       const fetchedWeather = await getCurrentWeather(props.checkbox);
-      console.log(fetchedWeather);
       setWeather(fetchedWeather);
       setLoading(false);
     };
@@ -29,14 +28,12 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = (props) => {
 
   return (
     <ThemeContext.Provider value={weather}>
-      <div>
-        <WeatherSearchBox />
-        <Container IsDayTime={weather.IsDayTime}>
-          <Header></Header>
-          <Main></Main>
-          <Footer></Footer>
-        </Container>
-      </div>
+      <WeatherSearchBox />
+      <Container IsDayTime={weather.IsDayTime}>
+        <Header></Header>
+        <Main></Main>
+        <Footer></Footer>
+      </Container>
     </ThemeContext.Provider>
   );
 };
