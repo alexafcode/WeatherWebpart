@@ -17,13 +17,13 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = (props) => {
   React.useEffect(() => {
     const fetchWeather = async () => {
       setLoading(true);
-      const fetchedWeather = await getCurrentWeather();
+      const fetchedWeather = await getCurrentWeather(props.checkbox);
       console.log(fetchedWeather);
       setWeather(fetchedWeather);
       setLoading(false);
     };
     fetchWeather();
-  }, []);
+  }, [props.checkbox]);
 
   if (loading) return <Spinner size={SpinnerSize.large} />;
 

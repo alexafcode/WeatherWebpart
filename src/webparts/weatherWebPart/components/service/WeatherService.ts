@@ -4,11 +4,17 @@ import config from "../../keys";
 
 const _startUrl = "https://dataservice.accuweather.com";
 const _key: string = config.weather_key;
+let units: string;
 
 const sleep = (milleseconds: number) =>
   new Promise((resolve) => setTimeout(resolve, milleseconds));
 
-export const getCurrentWeather = async (): Promise<IWeatherState> => {
+export const getCurrentWeather = async (
+  checkbox: string
+): Promise<IWeatherState> => {
+  const un = Boolean(checkbox);
+  units = un ? "Imperial" : "Metric";
+  ///
   await sleep(1000);
   return t;
   ///////////
@@ -70,7 +76,6 @@ export function transformCity(data, city): IWeatherState {
   });
   //return {
   // const units = "Metric"; //"Imperial";
-  const units = "Imperial";
 
   const weatherState: IWeatherState = {
     key: queryKey,

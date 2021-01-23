@@ -1,5 +1,6 @@
 export interface IWeatherWebPartProps {
   description: string;
+  checkbox: string;
 }
 
 export interface IWeatherState {
