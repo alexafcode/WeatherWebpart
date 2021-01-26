@@ -1,31 +1,113 @@
 import * as React from "react";
+import { SearchBox } from "office-ui-fabric-react/lib/SearchBox";
 import {
-  SearchBox,
-  ISearchBoxStyles,
-} from "office-ui-fabric-react/lib/SearchBox";
+  DetailsList,
+  SelectionMode,
+  CheckboxVisibility,
+  IColumn,
+  Selection,
+  IObjectWithKey,
+} from "office-ui-fabric-react";
+import { getSearchCity } from "../service/WeatherService";
+import { SearchResultContainer, searchBoxStyles } from "./styled";
 
+interface ISearchResult {
+  city: string;
+  country: string;
+  keyCity: string;
+}
+// const itemArr: ISearchResult[] = [
+//   { city: "Пермь", country: "Россия" },
+//   { city: "Новосибирск", country: "Россия" },
+//   { city: "Санкт-Петербург", country: "Россия" },
+//   { city: "Сочи", country: "Россия" },
+// ];
 const WeatherSearchBox: React.FC = () => {
-  const searchBoxStyles: Partial<ISearchBoxStyles> = {
-    root: { width: 200, margin: "auto auto 1%" },
+  const [searchResult, setSearchResult] = React.useState<ISearchResult[]>(null);
+  const [showSearchResult, setShowSearchResult] = React.useState<boolean>(
+    false
+  );
+
+  const getSelectionDetails = (): void => {
+    const item: IObjectWithKey[] = selection.getSelection();
+    console.log(item);
   };
+
+  const selection = new Selection({
+    onSelectionChanged: () => getSelectionDetails(),
+  });
+
+  const wrapperRef = React.useRef(null);
+
+  const handleClickOutside = (ev: MouseEvent) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(ev.target)) {
+      setShowSearchResult(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("click", handleClickOutside, false);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, false);
+    };
+  });
+
+  const columns: IColumn[] = [
+    {
+      key: "column1",
+      name: "City",
+      fieldName: "City",
+      minWidth: 100,
+      maxWidth: 100,
+      data: "string",
+      onRender: (item: ISearchResult) => {
+        return <span>{item.city}</span>;
+      },
+    },
+    {
+      key: "column2",
+      name: "Country",
+      fieldName: "name",
+      minWidth: 100,
+      maxWidth: 100,
+      data: "string",
+      onRender: (item: ISearchResult) => {
+        return <span>{item.country}</span>;
+      },
+    },
+  ];
+
   return (
-    <SearchBox
-      styles={searchBoxStyles}
-      placeholder="Search City"
-      underlined={true}
-      onEscape={(ev) => {
-        console.log("Custom onEscape Called");
-      }}
-      onClear={(ev) => {
-        console.log("Custom onClear Called");
-      }}
-      onChange={(newValue) =>
-        console.log("SearchBox onChange fired: " + newValue)
-      }
-      onSearch={(newValue) =>
-        console.log("SearchBox onSearch fired: " + newValue)
-      }
-    />
+    <form>
+      <SearchBox
+        styles={searchBoxStyles}
+        autoComplete={"off"}
+        placeholder="Search City"
+        underlined={true}
+        onSearch={(newValue) => {
+          console.log(newValue);
+          getSearchCity(newValue).then((r) => {
+            console.log(r);
+            setSearchResult(r);
+            setShowSearchResult(true);
+          });
+        }}
+      />
+      {showSearchResult && (
+        <SearchResultContainer ref={wrapperRef}>
+          <DetailsList
+            items={searchResult}
+            className={"search-list"}
+            compact={true}
+            selectionMode={SelectionMode.single}
+            checkboxVisibility={CheckboxVisibility.hidden}
+            isHeaderVisible={false}
+            columns={columns}
+            selection={selection}
+          ></DetailsList>
+        </SearchResultContainer>
+      )}
+    </form>
   );
 };
 

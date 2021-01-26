@@ -95,6 +95,25 @@ export function transformCity(data, city): IWeatherState {
   console.log(weatherState);
   return weatherState;
 }
+interface Iquery {
+  LocalizedName: string;
+  Country: {
+    LocalizedName: string;
+  };
+  Key: string;
+}
+export async function getSearchCity(query) {
+  const url = `/locations/v1/cities/autocomplete?apikey=${_key}&q=${query}&language=en-en`;
+  const result: Iquery[] = await getResource(url);
+  console.log(result);
+  return result.map((el: Iquery) => {
+    return {
+      country: el.Country.LocalizedName,
+      city: el.LocalizedName,
+      keyCity: el.Key,
+    };
+  });
+}
 
 // https://dataservice.accuweather.com/currentconditions/v1/294922?apikey=&language=en-en&details=true
 const t: IWeatherState = {
