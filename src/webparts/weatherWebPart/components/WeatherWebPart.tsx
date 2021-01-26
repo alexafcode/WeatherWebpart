@@ -1,9 +1,16 @@
 import * as React from "react";
-import { IWeatherWebPartProps, IWeatherState } from "./IWeatherWebPartProps";
+import {
+  IWeatherWebPartProps,
+  IWeatherState,
+  ISearchResult,
+} from "./IWeatherWebPartProps";
 import WeatherSearchBox from "./Search/WeatherSearchBox";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 import ThemeContext from "./ThemeContext";
-import { getCurrentWeather } from "./service/WeatherService";
+import {
+  getCurrentWeather,
+  getWeatherForCityByKey,
+} from "./service/WeatherService";
 import { Container } from "./Weather.styled";
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
@@ -17,12 +24,25 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
   const [weather, setWeather] = React.useState<IWeatherState>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
 
+  const onChangeCity = async (query: ISearchResult): Promise<void> => {
+    setLoading(true);
+    const result = await getWeatherForCityByKey(query);
+    setWeather(result);
+    setLoading(false);
+  };
+
+  const value = { weather, onChangeCity };
+
   React.useEffect(() => {
     const fetchWeather = async () => {
       setLoading(true);
-      const fetchedWeather = await getCurrentWeather(isImperialUnits);
-      setWeather(fetchedWeather);
-      setLoading(false);
+      try {
+        const fetchedWeather = await getCurrentWeather(isImperialUnits);
+        setWeather(fetchedWeather);
+        setLoading(false);
+      } catch {
+        setLoading(false);
+      }
     };
     fetchWeather();
   }, [isImperialUnits]);
@@ -30,7 +50,7 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
   if (loading) return <Spinner size={SpinnerSize.large} />;
 
   return (
-    <ThemeContext.Provider value={weather}>
+    <ThemeContext.Provider value={value}>
       {!isSearchDisable && <WeatherSearchBox />}
       <Container IsDayTime={weather.IsDayTime}>
         <Header></Header>

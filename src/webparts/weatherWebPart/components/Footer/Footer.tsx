@@ -8,7 +8,7 @@ const Container = styled.div`
 `;
 
 const Footer = () => {
-  const { weatherText, visibility } = React.useContext(ThemeContext);
+  const { weatherText, visibility } = React.useContext(ThemeContext).weather;
 
   return (
     <Container>

@@ -12,11 +12,12 @@ const Container = styled.div`
   .header__location {
     font-size: 0.8rem;
     margin: 0.5rem;
+    color: wheat;
   }
 `;
 
 const Headrer: React.FC = () => {
-  const { time, country, city } = React.useContext(ThemeContext);
+  const { time, country, city } = React.useContext(ThemeContext).weather;
   return (
     <Container>
       <div className={"header__time"}>{time}</div>

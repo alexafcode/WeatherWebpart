@@ -1,4 +1,4 @@
-import { IWeatherState } from "../IWeatherWebPartProps";
+import { IWeatherState, ISearchResult } from "../IWeatherWebPartProps";
 import config from "../../keys";
 // GeolocationPosition
 
@@ -63,6 +63,22 @@ export async function getWeatherForCity(data) {
     res: json[0],
     queryKey,
   };
+}
+
+export async function getWeatherForCityByKey(query: ISearchResult) {
+  const { keyCity, city, country } = query;
+  const url = `/currentconditions/v1/${query.keyCity}?apikey=${_key}&language=en-en&details=true`;
+  const json = await getResource(url);
+  const cityData = {
+    cityName: city,
+    countryName: country,
+  };
+  console.log(json);
+  const res = {
+    res: json[0],
+    keyCity,
+  };
+  return transformCity(res, cityData);
 }
 
 export function transformCity(data, city): IWeatherState {

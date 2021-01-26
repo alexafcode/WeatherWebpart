@@ -19,3 +19,9 @@ export interface IWeatherState {
   time: string;
   pressure: string;
 }
+
+export interface ISearchResult {
+  city: string;
+  country: string;
+  keyCity: string;
+}

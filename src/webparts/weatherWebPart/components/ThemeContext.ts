@@ -1,6 +1,11 @@
 import * as React from "react";
-import { IWeatherState } from "./IWeatherWebPartProps";
+import { IWeatherState, ISearchResult } from "./IWeatherWebPartProps";
 
-const ThemeContext = React.createContext<IWeatherState>(null);
+interface IContex {
+  weather: IWeatherState;
+  onChangeCity(query: ISearchResult): Promise<void>;
+}
+
+const ThemeContext = React.createContext<IContex>(null);
 
 export default ThemeContext;

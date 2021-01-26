@@ -1,5 +1,5 @@
 {
-  "name": "weather-test",
+  "name": "weather-web-part",
   "version": "0.0.1",
   "private": true,
   "main": "lib/index.js",

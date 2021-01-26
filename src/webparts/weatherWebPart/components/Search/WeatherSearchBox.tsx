@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ISearchResult } from "../IWeatherWebPartProps";
 import { SearchBox } from "office-ui-fabric-react/lib/SearchBox";
 import {
   DetailsList,
@@ -10,17 +11,13 @@ import {
 } from "office-ui-fabric-react";
 import { getSearchCity } from "../service/WeatherService";
 import { SearchResultContainer, searchBoxStyles } from "./styled";
+import ThemeContext from "../ThemeContext";
 
-interface ISearchResult {
-  city: string;
-  country: string;
-  keyCity: string;
-}
 // const itemArr: ISearchResult[] = [
-//   { city: "Пермь", country: "Россия" },
-//   { city: "Новосибирск", country: "Россия" },
-//   { city: "Санкт-Петербург", country: "Россия" },
-//   { city: "Сочи", country: "Россия" },
+//   { city: "Пермь", country: "Россия", keyCity: "1" },
+//   { city: "Новосибирск", country: "Россия", keyCity: "1" },
+//   { city: "Санкт-Петербург", country: "Россия", keyCity: "1" },
+//   { city: "Сочи", country: "Россия", keyCity: "1" },
 // ];
 const WeatherSearchBox: React.FC = () => {
   const [searchResult, setSearchResult] = React.useState<ISearchResult[]>(null);
@@ -28,9 +25,12 @@ const WeatherSearchBox: React.FC = () => {
     false
   );
 
+  const { onChangeCity } = React.useContext(ThemeContext);
+
   const getSelectionDetails = (): void => {
     const item: IObjectWithKey[] = selection.getSelection();
-    console.log(item);
+    const query = item[0] as ISearchResult;
+    onChangeCity(query);
   };
 
   const selection = new Selection({
@@ -86,8 +86,9 @@ const WeatherSearchBox: React.FC = () => {
         underlined={true}
         onSearch={(newValue) => {
           console.log(newValue);
+          // setSearchResult(itemArr);
+          // setShowSearchResult(true);
           getSearchCity(newValue).then((r) => {
-            console.log(r);
             setSearchResult(r);
             setShowSearchResult(true);
           });

@@ -19,7 +19,7 @@ const Main: React.FC = () => {
     windDirect,
     windSpeed,
     pressure,
-  } = React.useContext(ThemeContext);
+  } = React.useContext(ThemeContext).weather;
 
   return (
     <Container>
