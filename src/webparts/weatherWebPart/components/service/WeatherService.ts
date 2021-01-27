@@ -15,22 +15,22 @@ export const getCurrentWeather = async (
   const isImperial = Boolean(isImperialUnits);
   units = isImperial ? "Imperial" : "Metric";
   ///
-  await sleep(1000);
-  return t;
+  // await sleep(1000);
+  // return t;
   ///////////
-  // return new Promise((resolve, reject) => {
-  //   if ("geolocation" in navigator) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       async (position: GeolocationPosition) => {
-  //         const weather = await getWeather(position);
-  //         resolve(weather);
-  //       },
-  //       (err) => reject(`Can't get current location: ${err.message}`)
-  //     );
-  //   } else {
-  //     reject("geolocation is Not Supported");
-  //   }
-  // });
+  return new Promise((resolve, reject) => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position: GeolocationPosition) => {
+          const weather = await getWeather(position);
+          resolve(weather);
+        },
+        (err) => reject(`Can't get current location: ${err.message}`)
+      );
+    } else {
+      reject("geolocation is Not Supported");
+    }
+  });
 };
 
 const getResource = async (url: string): Promise<any> => {
@@ -44,38 +44,41 @@ const getResource = async (url: string): Promise<any> => {
 export async function getWeather(position: GeolocationPosition) {
   const { latitude, longitude } = position.coords;
   const url = `/locations/v1/cities/geoposition/search?apikey=${_key}&q=${latitude},${longitude}&language=en-en`;
-  const json = await getResource(url);
-  const names = {
-    cityName: json.ParentCity
-      ? json.ParentCity.LocalizedName
-      : json.LocalizedName,
-    countryName: json.Country ? json.Country.LocalizedName : json.country,
-  };
-  const data: object = await getWeatherForCity(json);
-  return transformCity(data, names);
+  try {
+    const res = await getResource(url);
+    const names = {
+      cityName: res.ParentCity
+        ? res.ParentCity.LocalizedName
+        : res.LocalizedName,
+      countryName: res.Country ? res.Country.LocalizedName : res.country,
+    };
+    const data = await getWeatherForCity(res);
+    return transformCity(data, names);
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 export async function getWeatherForCity(data) {
   const queryKey: string = data.Key ? data.Key : data.selectCity.Key;
   const url = `/currentconditions/v1/${queryKey}?apikey=${_key}&language=en-en&details=true`;
-  const json: object = await getResource(url);
+  const res = await getResource(url);
   return {
-    res: json[0],
+    res: res[0],
     queryKey,
   };
 }
 
 export async function getWeatherForCityByKey(query: ISearchResult) {
   const { keyCity, city, country } = query;
-  const url = `/currentconditions/v1/${query.keyCity}?apikey=${_key}&language=en-en&details=true`;
-  const json = await getResource(url);
+  const url = `/currentconditions/v1/${keyCity}?apikey=${_key}&language=en-en&details=true`;
+  const response = await getResource(url);
   const cityData = {
     cityName: city,
     countryName: country,
   };
-  console.log(json);
   const res = {
-    res: json[0],
+    res: response[0],
     keyCity,
   };
   return transformCity(res, cityData);
@@ -121,7 +124,6 @@ interface Iquery {
 export async function getSearchCity(query) {
   const url = `/locations/v1/cities/autocomplete?apikey=${_key}&q=${query}&language=en-en`;
   const result: Iquery[] = await getResource(url);
-  console.log(result);
   return result.map((el: Iquery) => {
     return {
       country: el.Country.LocalizedName,

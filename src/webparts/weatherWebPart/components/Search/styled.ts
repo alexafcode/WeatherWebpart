@@ -9,6 +9,7 @@ export const SearchResultContainer = styled.div`
   .search-list {
     position: absolute;
     max-height: 80%;
+    min-height: 150px;
   }
 `;
 

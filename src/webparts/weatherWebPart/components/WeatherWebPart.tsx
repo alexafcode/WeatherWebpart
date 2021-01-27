@@ -26,9 +26,14 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
 
   const onChangeCity = async (query: ISearchResult): Promise<void> => {
     setLoading(true);
-    const result = await getWeatherForCityByKey(query);
-    setWeather(result);
-    setLoading(false);
+    try {
+      const result = await getWeatherForCityByKey(query);
+      setWeather(result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const value = { weather, onChangeCity };
@@ -39,8 +44,9 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
       try {
         const fetchedWeather = await getCurrentWeather(isImperialUnits);
         setWeather(fetchedWeather);
-        setLoading(false);
-      } catch {
+      } catch (error) {
+        console.error(error);
+      } finally {
         setLoading(false);
       }
     };
@@ -52,11 +58,13 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
   return (
     <ThemeContext.Provider value={value}>
       {!isSearchDisable && <WeatherSearchBox />}
-      <Container IsDayTime={weather.IsDayTime}>
-        <Header></Header>
-        <Main></Main>
-        <Footer></Footer>
-      </Container>
+      {weather && (
+        <Container IsDayTime={weather.IsDayTime}>
+          <Header></Header>
+          <Main></Main>
+          <Footer></Footer>
+        </Container>
+      )}
     </ThemeContext.Provider>
   );
 };
