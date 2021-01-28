@@ -85,7 +85,6 @@ const WeatherSearchBox: React.FC = () => {
         placeholder="Search City"
         underlined={true}
         onSearch={(newValue) => {
-          console.log(newValue);
           // setSearchResult(itemArr);
           // setShowSearchResult(true);
           getSearchCity(newValue).then((r) => {

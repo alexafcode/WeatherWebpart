@@ -33,19 +33,29 @@ export const getCurrentWeather = async (
   });
 };
 
-const getResource = async (url: string): Promise<any> => {
-  const res = await fetch(`${_startUrl}${url}`, { mode: "cors" });
+const getResource = async <T>(url: string): Promise<T> => {
+  const res: Response = await fetch(`${_startUrl}${url}`, { mode: "cors" });
   if (!res.ok) {
     throw new Error(`Could not fetch ${url}, received ${res.status}`);
   }
   return await res.json();
 };
 
+interface IGetWeatherType {
+  ParentCity: {
+    LocalizedName: string;
+  };
+  LocalizedName: string;
+  Country: {
+    LocalizedName: string;
+  };
+  country: string;
+}
 export async function getWeather(position: GeolocationPosition) {
   const { latitude, longitude } = position.coords;
   const url = `/locations/v1/cities/geoposition/search?apikey=${_key}&q=${latitude},${longitude}&language=en-en`;
   try {
-    const res = await getResource(url);
+    const res = await getResource<IGetWeatherType>(url);
     const names = {
       cityName: res.ParentCity
         ? res.ParentCity.LocalizedName
@@ -59,12 +69,17 @@ export async function getWeather(position: GeolocationPosition) {
   }
 }
 
+interface IGetWeatherForCityType {
+  response: Array<any>;
+  queryKey: string;
+}
+
 export async function getWeatherForCity(data) {
   const queryKey: string = data.Key ? data.Key : data.selectCity.Key;
   const url = `/currentconditions/v1/${queryKey}?apikey=${_key}&language=en-en&details=true`;
-  const res = await getResource(url);
+  const response = await getResource<IGetWeatherForCityType>(url);
   return {
-    res: res[0],
+    res: response[0],
     queryKey,
   };
 }
@@ -72,7 +87,7 @@ export async function getWeatherForCity(data) {
 export async function getWeatherForCityByKey(query: ISearchResult) {
   const { keyCity, city, country } = query;
   const url = `/currentconditions/v1/${keyCity}?apikey=${_key}&language=en-en&details=true`;
-  const response = await getResource(url);
+  const response = await getResource<IGetWeatherForCityType>(url);
   const cityData = {
     cityName: city,
     countryName: country,
@@ -111,7 +126,6 @@ export function transformCity(data, city): IWeatherState {
     time: time,
     pressure: `${res.Pressure[units].Value} mb`,
   };
-  console.log(weatherState);
   return weatherState;
 }
 interface Iquery {
@@ -123,7 +137,7 @@ interface Iquery {
 }
 export async function getSearchCity(query) {
   const url = `/locations/v1/cities/autocomplete?apikey=${_key}&q=${query}&language=en-en`;
-  const result: Iquery[] = await getResource(url);
+  const result = await getResource<Iquery[]>(url);
   return result.map((el: Iquery) => {
     return {
       country: el.Country.LocalizedName,
