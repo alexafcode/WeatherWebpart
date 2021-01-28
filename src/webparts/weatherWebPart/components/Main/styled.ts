@@ -33,6 +33,7 @@ export const RealFeelContainer = styled.div`
   header {
     font-size: calc(0.5em + 1vmin);
     color: lightgray;
+    margin-bottom: 3%;
   }
   span {
     font-size: calc(1em + 1vmin);

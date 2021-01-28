@@ -10,6 +10,7 @@ export const SearchResultContainer = styled.div`
     position: absolute;
     max-height: 80%;
     min-height: 150px;
+    margin-top: -1%;
   }
 `;
 

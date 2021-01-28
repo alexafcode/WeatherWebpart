@@ -19,7 +19,7 @@ export const Container = styled.div<IContainerProps>`
   overflow: hidden;
   font-family: "Roboto", sans-serif;
   border-radius: 1rem;
-  @media ${device.laptop} {
+  @media ${device.tablet} {
     width: 100%;
   }
 `;
