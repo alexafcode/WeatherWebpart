@@ -1,6 +1,17 @@
-import { IWeatherState, ISearchResult } from "../IWeatherWebPartProps";
+import {
+  IWeatherState,
+  ISearchResult,
+  IForecast,
+} from "../IWeatherWebPartProps";
+import {
+  IGetWeatherType,
+  IGetWeatherForCityType,
+  Iquery,
+  IDailyForecasts,
+  IForecastResponse,
+} from "./IServiceProps";
 import config from "../../keys";
-// GeolocationPosition
+import { mockForecast, mockWeatherState } from "./mockData";
 
 const _startUrl = "https://dataservice.accuweather.com";
 const _key: string = config.weather_key;
@@ -16,7 +27,7 @@ export const getCurrentWeather = async (
   units = isImperial ? "Imperial" : "Metric";
   ///
   // await sleep(1000);
-  // return t;
+  // return mockWeatherState;
   ///////////
   return new Promise((resolve, reject) => {
     if ("geolocation" in navigator) {
@@ -41,16 +52,6 @@ const getResource = async <T>(url: string): Promise<T> => {
   return await res.json();
 };
 
-interface IGetWeatherType {
-  ParentCity: {
-    LocalizedName: string;
-  };
-  LocalizedName: string;
-  Country: {
-    LocalizedName: string;
-  };
-  country: string;
-}
 export async function getWeather(position: GeolocationPosition) {
   const { latitude, longitude } = position.coords;
   const url = `/locations/v1/cities/geoposition/search?apikey=${_key}&q=${latitude},${longitude}&language=en-en`;
@@ -63,15 +64,11 @@ export async function getWeather(position: GeolocationPosition) {
       countryName: res.Country ? res.Country.LocalizedName : res.country,
     };
     const data = await getWeatherForCity(res);
-    return transformCity(data, names);
+    const forecast = await getForecastForCity(data.queryKey);
+    return transformCity(data, names, forecast);
   } catch (e) {
     console.error(e);
   }
-}
-
-interface IGetWeatherForCityType {
-  response: Array<any>;
-  queryKey: string;
 }
 
 export async function getWeatherForCity(data) {
@@ -99,7 +96,11 @@ export async function getWeatherForCityByKey(query: ISearchResult) {
   return transformCity(res, cityData);
 }
 
-export function transformCity(data, city): IWeatherState {
+export function transformCity(
+  data,
+  city,
+  forecast?: IForecast[]
+): IWeatherState {
   const { res, queryKey } = data;
   const time = new Date(res.LocalObservationDateTime).toLocaleString("en", {
     day: "numeric",
@@ -125,17 +126,12 @@ export function transformCity(data, city): IWeatherState {
     IsDayTime: res.IsDayTime,
     time: time,
     pressure: `${res.Pressure[units].Value} mb`,
+    forecast: forecast,
   };
   return weatherState;
 }
-interface Iquery {
-  LocalizedName: string;
-  Country: {
-    LocalizedName: string;
-  };
-  Key: string;
-}
-export async function getSearchCity(query) {
+
+export async function getSearchCity(query: string) {
   const url = `/locations/v1/cities/autocomplete?apikey=${_key}&q=${query}&language=en-en`;
   const result = await getResource<Iquery[]>(url);
   return result.map((el: Iquery) => {
@@ -147,19 +143,33 @@ export async function getSearchCity(query) {
   });
 }
 
-// https://dataservice.accuweather.com/currentconditions/v1/294922?apikey=&language=en-en&details=true
-const t: IWeatherState = {
-  IsDayTime: true,
-  city: "Perm",
-  country: "Russia",
-  key: "294922",
-  pressure: "1016 mb",
-  realFeelTemperature: "-25° C",
-  temp: "-18°  C",
-  time: "January 22, 2021",
-  visibility: "8 km",
-  weatherIcon: 20,
-  weatherText: "Light snow",
-  windDirect: "ENE",
-  windSpeed: "8.1  mi/h",
-};
+export async function getForecastForCity(
+  queryKey: string
+): Promise<IForecast[]> {
+  ///return mockForecast;
+  ////
+  const url = `/forecasts/v1/daily/5day/${queryKey}?apikey=${_key}&language=en-en&${units}=true`;
+  const result = await getResource<IForecastResponse>(url);
+  const res: IDailyForecasts[] = result.DailyForecasts;
+  return res.map((el) => {
+    return {
+      key: queryKey,
+      date: new Date(el.Date).toLocaleString("en", {
+        day: "numeric",
+        month: "long",
+      }),
+      weekday: new Date(el.Date).toLocaleString("en", {
+        weekday: "long",
+      }),
+      dayIcon: el.Day.Icon,
+      dayIconText: el.Day.IconPhrase,
+      tempDay: `${el.Temperature.Maximum.Value.toFixed()} ° ${
+        el.Temperature.Maximum.Unit
+      }`, //units
+      nightIcon: el.Night.Icon,
+      tempNight: `${el.Temperature.Minimum.Value.toFixed()} ° ${
+        el.Temperature.Minimum.Unit
+      }`,
+    };
+  });
+}

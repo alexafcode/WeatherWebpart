@@ -18,10 +18,22 @@ export interface IWeatherState {
   IsDayTime: boolean;
   time: string;
   pressure: string;
+  forecast?: IForecast[];
 }
 
 export interface ISearchResult {
   city: string;
   country: string;
   keyCity: string;
+}
+
+export interface IForecast {
+  key: string;
+  date: string;
+  weekday: string;
+  dayIcon: number;
+  dayIconText: string;
+  tempDay: string;
+  nightIcon: number;
+  tempNight: string;
 }
