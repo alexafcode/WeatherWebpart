@@ -7,6 +7,10 @@ export interface IGetWeatherType {
     LocalizedName: string;
   };
   country: string;
+  Key: string;
+  selectCity: {
+    Key: string;
+  };
 }
 
 export interface IGetWeatherForCityType {

@@ -63,16 +63,18 @@ export async function getWeather(position: GeolocationPosition) {
         : res.LocalizedName,
       countryName: res.Country ? res.Country.LocalizedName : res.country,
     };
-    const data = await getWeatherForCity(res);
-    const forecast = await getForecastForCity(data.queryKey);
-    return transformCity(data, names, forecast);
+    const queryKey: string = res.Key ? res.Key : res.selectCity.Key;
+    const [response, forecast] = await Promise.all([
+      getWeatherForCity(queryKey),
+      getForecastForCity(queryKey),
+    ]);
+    return transformCity(response, names, forecast);
   } catch (e) {
     console.error(e);
   }
 }
 
-export async function getWeatherForCity(data) {
-  const queryKey: string = data.Key ? data.Key : data.selectCity.Key;
+export async function getWeatherForCity(queryKey: string) {
   const url = `/currentconditions/v1/${queryKey}?apikey=${_key}&language=en-en&details=true`;
   const response = await getResource<IGetWeatherForCityType>(url);
   return {
@@ -84,7 +86,10 @@ export async function getWeatherForCity(data) {
 export async function getWeatherForCityByKey(query: ISearchResult) {
   const { keyCity, city, country } = query;
   const url = `/currentconditions/v1/${keyCity}?apikey=${_key}&language=en-en&details=true`;
-  const response = await getResource<IGetWeatherForCityType>(url);
+  const [response, forecast] = await Promise.all([
+    getResource<IGetWeatherForCityType>(url),
+    getForecastForCity(keyCity),
+  ]);
   const cityData = {
     cityName: city,
     countryName: country,
@@ -93,7 +98,7 @@ export async function getWeatherForCityByKey(query: ISearchResult) {
     res: response[0],
     keyCity,
   };
-  return transformCity(res, cityData);
+  return transformCity(res, cityData, forecast);
 }
 
 export function transformCity(
@@ -146,7 +151,7 @@ export async function getSearchCity(query: string) {
 export async function getForecastForCity(
   queryKey: string
 ): Promise<IForecast[]> {
-  ///return mockForecast;
+  // return mockForecast;
   ////
   const url = `/forecasts/v1/daily/5day/${queryKey}?apikey=${_key}&language=en-en&${units}=true`;
   const result = await getResource<IForecastResponse>(url);
