@@ -1,17 +1,16 @@
 import styled from "styled-components";
 
-export const SaveContainer = styled.div`
-  flex: 1;
-`;
 export const InfoContainer = styled.div`
-  flex: 1;
-  div {
+  display: flex;
+  /* div {
     color: lightgray;
-    text-align: center;
+    text-align: right;
     margin-bottom: 0.25rem;
     font-size: calc(0.25em + 1vmin);
-  }
+  } */
 `;
-export const ButtonContainer = styled.div`
-  flex: 1;
+export const TextContainer = styled.p`
+  color: lightgray;
+  margin: auto;
+  font-size: calc(0.2em + 1vmin);
 `;

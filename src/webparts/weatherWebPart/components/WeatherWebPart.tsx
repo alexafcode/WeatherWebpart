@@ -15,6 +15,7 @@ import { Container } from "./Weather.styled";
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import Main from "./Main/Main";
+import Forecast from "./Forecast/Forecast";
 import "./WeatherWebPart.module.scss";
 
 const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
@@ -43,6 +44,7 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
       setLoading(true);
       try {
         const fetchedWeather = await getCurrentWeather(isImperialUnits);
+        console.log(fetchedWeather);
         setWeather(fetchedWeather);
       } catch (error) {
         console.error(error);
@@ -60,9 +62,11 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
       {!isSearchDisable && <WeatherSearchBox />}
       {weather && (
         <Container IsDayTime={weather.IsDayTime}>
-          <Header></Header>
-          <Main></Main>
-          <Footer></Footer>
+          <Header />
+          <Main />
+          <Footer />
+          <hr></hr>
+          <Forecast />
         </Container>
       )}
     </ThemeContext.Provider>

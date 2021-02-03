@@ -1,24 +1,21 @@
 import * as React from "react";
 import styled from "styled-components";
 import ThemeContext from "../ThemeContext";
-import { SaveContainer, InfoContainer, ButtonContainer } from "./styled";
+import { InfoContainer, TextContainer } from "./styled";
 
 const Container = styled.div`
   display: flex;
 `;
 
-const Footer = () => {
+const Footer: React.FC = () => {
   const { weatherText, visibility } = React.useContext(ThemeContext).weather;
 
   return (
-    <Container>
-      <SaveContainer />
-      <InfoContainer>
-        <div>{weatherText}</div>
-        <div>Visibility: {visibility}</div>
-      </InfoContainer>
-      <ButtonContainer />
-    </Container>
+    <InfoContainer>
+      <TextContainer>
+        {weatherText} Visibility: {visibility}
+      </TextContainer>
+    </InfoContainer>
   );
 };
 

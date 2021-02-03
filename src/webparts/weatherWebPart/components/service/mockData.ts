@@ -1,21 +1,5 @@
 import { IWeatherState, IForecast } from "../IWeatherWebPartProps";
 
-export const mockWeatherState: IWeatherState = {
-  IsDayTime: true,
-  city: "Perm",
-  country: "Russia",
-  key: "294922",
-  pressure: "1016 mb",
-  realFeelTemperature: "-25° C",
-  temp: "-18°  C",
-  time: "January 22, 2021",
-  visibility: "8 km",
-  weatherIcon: 20,
-  weatherText: "Light snow",
-  windDirect: "ENE",
-  windSpeed: "8.1  mi/h",
-};
-
 export const mockForecast: IForecast[] = [
   {
     key: "294922",
@@ -68,3 +52,20 @@ export const mockForecast: IForecast[] = [
     weekday: "суббота",
   },
 ];
+
+export const mockWeatherState: IWeatherState = {
+  IsDayTime: true,
+  city: "Perm",
+  country: "Russia",
+  key: "294922",
+  pressure: "1016 mb",
+  realFeelTemperature: "-25° C",
+  temp: "-18°  C",
+  time: "January 22, 2021",
+  visibility: "8 km",
+  weatherIcon: 20,
+  weatherText: "Light snow",
+  windDirect: "ENE",
+  windSpeed: "8.1  mi/h",
+  forecast: mockForecast,
+};
