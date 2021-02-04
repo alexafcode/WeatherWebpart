@@ -14,15 +14,6 @@ export const TempContainer = styled.div`
   font-weight: 400;
   line-height: 1rem;
   margin-bottom: 10%;
-  header {
-    font-size: calc(0.75em + 1vmin);
-    margin-bottom: 5%;
-    color: lightgray;
-  }
-  span {
-    font-size: calc(1.25em + 1vmin);
-    color: whitesmoke;
-  }
 `;
 
 export const RealFeelContainer = styled.div`
@@ -30,15 +21,20 @@ export const RealFeelContainer = styled.div`
   font-weight: 400;
   line-height: 1rem;
   margin-bottom: 10%;
-  header {
-    font-size: calc(0.5em + 1vmin);
-    color: lightgray;
-    margin-bottom: 3%;
-  }
-  span {
-    font-size: calc(1em + 1vmin);
-    color: whitesmoke;
-  }
+`;
+interface IHeaderProps {
+  size?: number;
+  isWhite?: boolean;
+}
+
+export const Header = styled.div<IHeaderProps>`
+  font-size: ${({ size }) => `calc(${size}em + 1vmin)`};
+  color: ${({ isWhite }) => (isWhite ? "whitesmoke" : "lightgray")};
+  margin-bottom: 5%;
+`;
+export const Span = styled.span<IHeaderProps>`
+  font-size: ${({ size }) => `calc(${size}em + 1vmin)`};
+  color: whitesmoke;
 `;
 
 interface IIConProps {
@@ -47,9 +43,6 @@ interface IIConProps {
 
 const getIconUrl = (iconNumber: number) =>
   require(`../../assets/weather-icons/${iconNumber}.svg`);
-
-//   background-image: ${({ iconNumber }) => `url(${getIconUrl(iconNumber)})`};
-// `
 
 export const LogoWeather = styled.img.attrs<IIConProps>(({ iconNumber }) => ({
   src: `${String(getIconUrl(iconNumber))}`,
@@ -63,13 +56,4 @@ export const RightContainer = styled.div`
   flex: 1;
   text-align: center;
   margin-top: -5%;
-  div {
-    font-size: calc(0.5em + 1vmin);
-    color: whitesmoke;
-    margin-bottom: 5%;
-  }
-  span {
-    margin-left: 5%;
-    margin-bottom: 5%;
-  }
 `;

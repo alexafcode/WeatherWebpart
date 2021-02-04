@@ -7,6 +7,8 @@ import {
   LogoWeather,
   TempContainer,
   RealFeelContainer,
+  Header,
+  Span,
 } from "./styled";
 
 const iconPressure = require(`../../assets/weather-icons/icon-pressure.png`);
@@ -21,33 +23,44 @@ const Main: React.FC = () => {
     pressure,
   } = React.useContext(ThemeContext).weather;
 
+  const leftContainer = (
+    <LeftContainer>
+      <TempContainer>
+        <Header size={0.75}>Now:</Header>
+        <Span size={1.25}>{temp}</Span>
+      </TempContainer>
+      <RealFeelContainer>
+        <Header size={0.5}>Real Feel:</Header>
+        <Span size={1}>{realFeelTemperature}</Span>
+      </RealFeelContainer>
+    </LeftContainer>
+  );
+
+  const rightContainer = (
+    <RightContainer>
+      <Header size={0.5} isWhite={true}>
+        Wind: {windDirect}
+      </Header>
+      <div>
+        <Header size={0.5} isWhite={true}>
+          Wind Gusts:
+        </Header>
+        <Header size={0.5} isWhite={true}>
+          {windSpeed}
+        </Header>
+      </div>
+      <div>
+        <img src={String(iconPressure)} alt="pressure" />
+        <Span>{pressure}</Span>
+      </div>
+    </RightContainer>
+  );
+
   return (
     <Container>
-      <LeftContainer>
-        <TempContainer>
-          <header>Now:</header>
-          <span>{temp}</span>
-        </TempContainer>
-        <RealFeelContainer>
-          <header>Real Feel:</header>
-          <span>{realFeelTemperature}</span>
-        </RealFeelContainer>
-      </LeftContainer>
+      {leftContainer}
       <LogoWeather iconNumber={weatherIcon}></LogoWeather>
-      <RightContainer>
-        <div>
-          <span>Wind:</span>
-          <span>{windDirect}</span>
-        </div>
-        <div>
-          <div>Wind Gusts:</div>
-          <div>{windSpeed}</div>
-        </div>
-        <div>
-          <img src={String(iconPressure)} alt="pressure" />
-          <span>{pressure}</span>
-        </div>
-      </RightContainer>
+      {rightContainer}
     </Container>
   );
 };

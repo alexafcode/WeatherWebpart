@@ -151,8 +151,6 @@ export async function getSearchCity(query: string) {
 export async function getForecastForCity(
   queryKey: string
 ): Promise<IForecast[]> {
-  // return mockForecast;
-  ////
   const url = `/forecasts/v1/daily/5day/${queryKey}?apikey=${_key}&language=en-en&${units}=true`;
   const result = await getResource<IForecastResponse>(url);
   const res: IDailyForecasts[] = result.DailyForecasts;
@@ -170,7 +168,7 @@ export async function getForecastForCity(
       dayIconText: el.Day.IconPhrase,
       tempDay: `${el.Temperature.Maximum.Value.toFixed()} ° ${
         el.Temperature.Maximum.Unit
-      }`, //units
+      }`,
       nightIcon: el.Night.Icon,
       tempNight: `${el.Temperature.Minimum.Value.toFixed()} ° ${
         el.Temperature.Minimum.Unit
