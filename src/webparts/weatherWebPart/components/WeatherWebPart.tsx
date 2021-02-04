@@ -19,8 +19,8 @@ import Forecast from "./Forecast/Forecast";
 import "./WeatherWebPart.module.scss";
 
 const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
-  isImperialUnits,
   isSearchDisable,
+  unit,
 }) => {
   const [weather, setWeather] = React.useState<IWeatherState>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -36,6 +36,7 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
       setLoading(false);
     }
   };
+  console.log(unit);
 
   const value = { weather, onChangeCity };
 
@@ -43,8 +44,7 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
     const fetchWeather = async () => {
       setLoading(true);
       try {
-        const fetchedWeather = await getCurrentWeather(isImperialUnits);
-        console.log(fetchedWeather);
+        const fetchedWeather = await getCurrentWeather(unit);
         setWeather(fetchedWeather);
       } catch (error) {
         console.error(error);
@@ -53,7 +53,7 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
       }
     };
     fetchWeather();
-  }, [isImperialUnits]);
+  }, [unit]);
 
   if (loading) return <Spinner size={SpinnerSize.large} />;
 

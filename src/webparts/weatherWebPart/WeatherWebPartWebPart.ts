@@ -5,6 +5,7 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
   PropertyPaneCheckbox,
+  PropertyPaneChoiceGroup,
 } from "@microsoft/sp-property-pane";
 import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
 
@@ -14,8 +15,8 @@ import { IWeatherWebPartProps } from "./components/IWeatherWebPartProps";
 
 export interface IWeatherWebPartWebPartProps {
   description: string;
-  isImperialUnits: string;
   isSearchDisable: string;
+  unit: string;
 }
 
 export default class WeatherWebPartWebPart extends BaseClientSideWebPart<IWeatherWebPartWebPartProps> {
@@ -24,8 +25,8 @@ export default class WeatherWebPartWebPart extends BaseClientSideWebPart<IWeathe
       WeatherWebPart,
       {
         description: this.properties.description,
-        isImperialUnits: this.properties.isImperialUnits,
         isSearchDisable: this.properties.isSearchDisable,
+        unit: this.properties.unit,
       }
     );
 
@@ -40,7 +41,6 @@ export default class WeatherWebPartWebPart extends BaseClientSideWebPart<IWeathe
     return Version.parse("1.0");
   }
 
-  private labelboxProperty: string = "Use Imperial Units";
   private labelboxSearchProperty: string = "Disable Search";
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -57,13 +57,22 @@ export default class WeatherWebPartWebPart extends BaseClientSideWebPart<IWeathe
                 PropertyPaneTextField("description", {
                   label: strings.DescriptionFieldLabel,
                 }),
-                PropertyPaneCheckbox("isImperialUnits", {
-                  text: this.labelboxProperty,
-                  checked: false,
-                }),
                 PropertyPaneCheckbox("isSearchDisable", {
                   text: this.labelboxSearchProperty,
                   checked: false,
+                }),
+                PropertyPaneChoiceGroup("unit", {
+                  label: "Units",
+                  options: [
+                    {
+                      text: "Celsius",
+                      key: "Metric",
+                    },
+                    {
+                      text: "Fahrenheit",
+                      key: "Imperial",
+                    },
+                  ],
                 }),
               ],
             },

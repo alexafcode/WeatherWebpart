@@ -21,10 +21,9 @@ const sleep = (milleseconds: number) =>
   new Promise((resolve) => setTimeout(resolve, milleseconds));
 
 export const getCurrentWeather = async (
-  isImperialUnits: string
+  unitprops: string
 ): Promise<IWeatherState> => {
-  const isImperial = Boolean(isImperialUnits);
-  units = isImperial ? "Imperial" : "Metric";
+  units = unitprops;
   ///
   // await sleep(1000);
   // return mockWeatherState;

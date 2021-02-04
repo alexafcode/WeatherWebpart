@@ -13,12 +13,6 @@ import { getSearchCity } from "../service/WeatherService";
 import { SearchResultContainer, searchBoxStyles } from "./styled";
 import ThemeContext from "../ThemeContext";
 
-// const itemArr: ISearchResult[] = [
-//   { city: "Пермь", country: "Россия", keyCity: "1" },
-//   { city: "Новосибирск", country: "Россия", keyCity: "1" },
-//   { city: "Санкт-Петербург", country: "Россия", keyCity: "1" },
-//   { city: "Сочи", country: "Россия", keyCity: "1" },
-// ];
 const WeatherSearchBox: React.FC = () => {
   const [searchResult, setSearchResult] = React.useState<ISearchResult[]>(null);
   const [showSearchResult, setShowSearchResult] = React.useState<boolean>(
@@ -85,8 +79,6 @@ const WeatherSearchBox: React.FC = () => {
         placeholder="Search City"
         underlined={true}
         onSearch={(newValue) => {
-          // setSearchResult(itemArr);
-          // setShowSearchResult(true);
           getSearchCity(newValue).then((r) => {
             setSearchResult(r);
             setShowSearchResult(true);
