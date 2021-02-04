@@ -62,7 +62,7 @@ export default class WeatherWebPartWebPart extends BaseClientSideWebPart<IWeathe
                   checked: false,
                 }),
                 PropertyPaneChoiceGroup("unit", {
-                  label: "Units",
+                  label: strings.LabelUnitText,
                   options: [
                     {
                       text: "Celsius",
