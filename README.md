@@ -3,7 +3,7 @@
 ![alt text](https://github.com/alexafcode/WeatherWebpart/blob/main/src/webparts/weatherWebPart/img/WWP.png?raw=true)
 
 ## Table of Contents
-- [Library features](#features)
+- [Library features](#library-features)
 - [Description](#description)
 - [Installation](#installation)
 
