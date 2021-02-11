@@ -1,6 +1,6 @@
 # SharePoint SPFX Weather Web Part
 
-![alt text](https://github.com/alexafcode/WeatherWebpart/tree/main/src/webparts/weatherWebPart/img/WWP.png?raw=true)
+![alt text](https://github.com/alexafcode/WeatherWebpart/blob/main/src/webparts/weatherWebPart/img/WWP.png?raw=true)
 
 ## Table of Contents
 - [Library features](#features)
@@ -16,7 +16,7 @@ By default, the Weather web part will use the your location and you can search b
 2. Able Disable Search.
 3. Switch temperature units
 
-![alt text](https://github.com/alexafcode/WeatherWebpart/tree/main/src/webparts/weatherWebPart/img/Settings.png?raw=true)
+![alt text](https://github.com/alexafcode/WeatherWebpart/blob/main/src/webparts/weatherWebPart/img/Settings.png?raw=true)
 
 ## Installation
 * Sign up over at developer.accuweather.com to get an API key.
