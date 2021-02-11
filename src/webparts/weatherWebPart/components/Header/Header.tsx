@@ -12,6 +12,7 @@ const Container = styled.div`
   .header__location {
     font-size: 0.8rem;
     margin: 0.5rem;
+    margin-bottom: 1rem;
     color: wheat;
   }
 `;

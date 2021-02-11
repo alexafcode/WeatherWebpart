@@ -36,7 +36,6 @@ const WeatherWebPart: React.FC<IWeatherWebPartProps> = ({
       setLoading(false);
     }
   };
-  console.log(unit);
 
   const value = { weather, onChangeCity };
 
