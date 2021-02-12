@@ -17,7 +17,7 @@ const handleTextSize = (size: string) => {
     case "small":
       return "calc(0.2em + 1vmin)";
     case "standart":
-      return "calc(0.25em + 1vmin)";
+      return "calc(0.3em + 1vmin)";
     default:
       return "calc(0.4em + 1vmin)";
   }
